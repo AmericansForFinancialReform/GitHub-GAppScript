@@ -27,6 +27,9 @@
       } 
     </style>
     <script>
+    // TO-DO: see if we are already authenticated
+    // update button if we are -- button text and button url
+
       function updateButton(authURL, button) {
         button.onclick = window.open(authURL);
       }
@@ -54,7 +57,7 @@ openGitHubDialog() to updateButton().
           .withUserObject(this)
           .openGitHubDialog()">
    <i class="fa fa-github icon" aria-hidden="true"></i>
-   Login to GitHub
+   <span id="github_button">Login to GitHub</span>
 </button>
 
 <br><br>

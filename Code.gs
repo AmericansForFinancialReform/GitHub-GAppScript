@@ -54,6 +54,13 @@ function openGitHubDialog() {
   return html;
 }
 
+// currently unused
+function isAuthenticated() {
+  if (getGithubService_().hasAccess()){
+    return true;
+  } 
+  return false; 
+}
 
 /**
  * Getting a file less than 1MB. 
@@ -126,8 +133,27 @@ function insertTableFromAsciidoc() {
     if (element) {
       var parent = element.getParent();
       twoDimensionalArray = convertAsciidocTable(git_file);
+
+
+      var darkBlue = "#0B5394";
+      var white = '#FFFFFF';
+            
+      var tableStyle = {};
+      tableStyle[DocumentApp.Attribute.FONT_FAMILY] = 'Arial Narrow';
+
+      var headerRowStyle = {};
+      headerRowStyle[DocumentApp.Attribute.BACKGROUND_COLOR] =  darkBlue;
+      headerRowStyle[DocumentApp.Attribute.FOREGROUND_COLOR] =  white;
+      headerRowStyle[DocumentApp.Attribute.BOLD] = true;
       
-      body.insertTable(parent.getChildIndex(element) + 1, twoDimensionalArray);
+      var table = body.insertTable(parent.getChildIndex(element) + 1, twoDimensionalArray);      
+      table.setAttributes(tableStyle);
+      table.getRow(0).setAttributes(headerRowStyle);
+      var numCells = table.getRow(0).getNumChildren();
+      var i;
+      for (i=0; i<numCells; i++) {
+        table.getRow(0).getCell(i).setBackgroundColor(darkBlue);
+      }
     }
     else {
       DocumentApp.getUi().alert('No element; Cannot insert text here.');
