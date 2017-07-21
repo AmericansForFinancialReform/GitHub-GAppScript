@@ -357,7 +357,7 @@ var Github = (function() {
 
     /**
      * Create a new Repository wrapper
-     * @param {string} user - the user who owns the respository
+     * @param {string} user - the user who owns the repository
      * @param {string} repo - the name of the repository
      * @return {Repository}
      */
