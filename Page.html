@@ -27,6 +27,30 @@
       } 
     </style>
     <script>
+    google.script.run.withSuccessHandler(showRepoList)
+        .getRepoList();
+    
+    function showRepoList(data) {
+      var list = document.getElementById("repo"); 
+      list.append(new Option("--Select your repo--", ""));
+      for (i in data.items) {
+        list.append(new Option(data.items[i].name, data.items[i].name));
+      }
+      list.dropdown('refresh')
+      if (data.git_repo) {
+        // https://github.com/Semantic-Org/Semantic-UI/issues/2247#issuecomment-165741871
+        setTimeout(function() {
+          list.dropdown('set selected', data.git_repo.name);
+        }, 1);
+        document.getElementById("sub_dir").val(data.git_repo.sub_dir);
+        document.getElementById('repo_owner').val(data.git_repo.owner);
+      }
+      
+      list.parent().removeClass('loading');
+      document.getElementById('repo').trigger('change');
+      document.getElementById('step-folder-open button').removeClass('disabled');
+    }
+    
     // TO-DO: see if we are already authenticated
     // update button if we are -- button text and button url
 
@@ -36,42 +60,60 @@
     </script>
   </head>
   <body>
+  <div class="heading">Login to GitHub</div>
+    <hr/>
+  <button onclick="google.script.run
+  .withSuccessHandler(updateButton)
+  .withUserObject(this)
+  .openGitHubDialog()">
+  <i class="fa fa-github icon" aria-hidden="true"></i>
+  <span id="github_button">Login</span>
+  </button>
+  
+  <br><br>
+  <div class="heading">Performance Tables</div>
+    <hr/>
+  <!-- 
+  withSuccessHandler: Sets a callback function to run if the server-side function returns successfully. 
+  
+  Further documentation of additional methods you can use with google.script.run are available here:
+  https://developers.google.com/apps-script/guides/html/reference/run#withfailurehandlerfunction
+  
+  Should openGitHubDialog() return successfully, the updateButton function runs, 
+  passing both the *this* user object and the return value of
+  openGitHubDialog() to updateButton().
+  -->
+  
+  <br><br>
+  <button onclick="google.script.run.insertTableFromAsciidoc()">
+  Insert Table
+  </button>
+  
+  <br><br>
+  <div class="heading">Insert Text</div>
+    <hr/>
+  <br><br>
+  <button onclick="google.script.run.getSmallFileFromGithub()">
+  Insert Text from File
+  </button>
 
-
-<div class="heading">Performance Tables</div>
-
-<!-- 
-withSuccessHandler: Sets a callback function to run if the server-side function returns successfully. 
-
-Further documentation of additional methods you can use with google.script.run are available here:
-https://developers.google.com/apps-script/guides/html/reference/run#withfailurehandlerfunction
-
-Should openGitHubDialog() return successfully, the updateButton function runs, 
-passing both the *this* user object and the return value of
-openGitHubDialog() to updateButton().
--->
-
-<br><br>
-<button onclick="google.script.run
-          .withSuccessHandler(updateButton)
-          .withUserObject(this)
-          .openGitHubDialog()">
-   <i class="fa fa-github icon" aria-hidden="true"></i>
-   <span id="github_button">Login to GitHub</span>
-</button>
-
-<br><br>
-<button onclick="google.script.run.getSmallFileFromGithub()">
-Insert Text from File
-</button>
-
-<br><br>
-<button onclick="google.script.run.insertTableFromAsciidoc()">
-Insert Table
-</button>
-
-<!-- font awesome -->
-<script src="//use.fontawesome.com/d9bd51c39a.js"></script>
+  
+          <form id="repo_form">
+          <p>
+            <select id="repo" name="repo" class="ui search dropdown selection fluid loading">
+              <option value="">Select a repository</option>
+            </select>
+          </p>
+          <div class="ui labeled input">
+            <span class="ui label">/</span>
+            <input id="sub_dir" name="sub_dir" type="text" placeholder="(Optional) Sub directory path to Twitter Archive...">
+            <span class="ui label">/</span>
+          </div>
+          <input type="hidden" id="repo_owner" name="repo_owner">
+        </form>
+  
+  <!-- font awesome -->
+  <script src="//use.fontawesome.com/d9bd51c39a.js"></script>
 
   </body>
 </html>

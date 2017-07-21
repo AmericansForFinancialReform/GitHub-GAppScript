@@ -101,6 +101,28 @@ function getSmallFileFromGithub(){
   }
 }
 
+
+/**
+* Gets list of Github users repositories.
+* @return {Object} - repos from Github
+*/
+function getRepoList(){
+  var properties = JSON.parse(PropertiesService.getUserProperties().getProperty('gasgit_properties')) || {};
+  Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
+  
+  if (!properties.git_repo || (properties.git_repo && !properties.git_repo.owner)){
+    properties.git_repo = {owner: Github.User.getProfile().login};
+    PropertiesService.getUserProperties().setProperty('gasgit_properties', JSON.stringify(properties));
+  } 
+  
+  var items_list = Github.User.listRepos({sort:'created', direction:'desc'});
+  items_list = items_list.filter(function (el) {
+                           return el.owner.login == properties.git_repo.owner} );
+  var repo = {items: items_list,
+              git_repo: properties.git_repo || false }; 
+  return repo;
+}
+
 /**
 *
 */
