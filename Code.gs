@@ -50,17 +50,8 @@ function openGitHubDialog() {
     html = '<button id="github_signout" class="ui github button"><i class="fa fa-github icon"></i>Disconnect Github</button>';
   } else {
     html = getGithubAuthURL();
-    //authorizationUrl = getGithubAuthURL();
-    //html = HtmlService.createHtmlOutput('<a href="'+authorizationUrl+'">Sign in with GitHub</a>');
   }
   return html;
-  /*
-  authorizationUrl = PropertiesService.getScriptProperties().getProperty('GitAuthURL');
-  var html = HtmlService.createHtmlOutput('<a href="'+authorizationUrl+'">Sign in with GitHub</a>');
-  DocumentApp.getUi() // Or DocumentApp or FormApp.
-      .showModalDialog(html, 'Login to GitHub');
-  */
-  // Need a way to make the dialog go away / show if it worked or failed
 }
 
 
@@ -71,19 +62,15 @@ function openGitHubDialog() {
 function getSmallFileFromGithub(){
   // set token service
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
-  // set the repository wrapper
-  // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO');
-  Github.setRepo('realbankreform', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
+  
+  // NOTE: This assumes that the developer application set up was set up at the Organization level
+  // Github.setRepo('Organization_Name', 'YOUR_REPO');
+  Github.setRepo('AmericansForFinancialReform', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
   var branch = 'heads/master'; // you can switch to differnt branch
   
   // getting a single file object
   var git_file_obj = Github.Repository.getContents({ref: branch}, 'test.adoc');
   var git_file = Utilities.newBlob(Utilities.base64Decode(git_file_obj.content)).getDataAsString();
-  
-  // grab the entire data/ folder
-  var git_dir = Github.Repository.getContents({ref: branch}, 'data');
-  // In my project I included a getContentsByUrl which uses a git url which is useful if working within the tree
-  //var git_file_by_url = Github.Repository.getContentsByUrl(git_dir[0].git_url);
   
   // This will log the contents of the README to the console
   Logger.log(git_file);
@@ -119,7 +106,7 @@ function insertTableFromAsciidoc() {
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
   // set the repository wrapper
   // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO');
-  Github.setRepo('alexisgo', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
+  Github.setRepo('AmericansForFinancialReform', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
   var branch = 'heads/master'; // you can switch to differnt branch
   
   // getting a single file object
