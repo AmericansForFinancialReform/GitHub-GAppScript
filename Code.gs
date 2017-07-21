@@ -25,14 +25,10 @@ This example code has been put together by Martin Hawksey https://mashe.hawksey.
  *     running in, inspect e.authMode.
  */
 function onOpen(e) {
-  // obtain and then record the github authorization url
-  getGithubAuthURL();
-  
   DocumentApp.getUi() // Or DocumentApp or FormApp.
   .createMenu('Legal Tools')
   .addItem('Text Importer', 'showSidebar')
   .addToUi();
-
 }
 
 
