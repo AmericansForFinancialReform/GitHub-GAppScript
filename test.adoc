@@ -1,0 +1,8 @@
+[role="tester:name=CoolStuff:description=This is my amazing description"]
+|===
+| Col1 | Col2 (Description) | Col3
+
+|Stuff 1 | | 
+|Stuff 2 | | 
+|Total Stuff| | 
+|===
