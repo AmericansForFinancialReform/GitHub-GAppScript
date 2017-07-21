@@ -27,11 +27,21 @@ This example code has been put together by Martin Hawksey https://mashe.hawksey.
 function onOpen(e) {
   // obtain and then record the github authorization url
   getGithubAuthURL();
-  DocumentApp.getUi().createAddonMenu()
-      .addItem('Login GitHub', 'openGitHubDialog')
-      .addItem('Insert Text from File', 'getSmallFileFromGithub')
-      .addItem('InsertTable', 'insertTableFromAsciidoc')
-      .addToUi();  
+  
+  DocumentApp.getUi() // Or DocumentApp or FormApp.
+  .createMenu('Legal Tools')
+  .addItem('Text Importer', 'showSidebar')
+  .addToUi();
+
+}
+
+
+function showSidebar() {
+  var html = HtmlService.createHtmlOutputFromFile('Page')
+      .setTitle('Import Legal Text')
+      .setWidth(250);
+  DocumentApp.getUi() // Or DocumentApp or FormApp.
+      .showSidebar(html);
 }
 
 function openGitHubDialog() {
@@ -53,7 +63,7 @@ function getSmallFileFromGithub(){
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
   // set the repository wrapper
   // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO');
-  Github.setRepo('AmericansForFinancialReform', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
+  Github.setRepo('realbankreform', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
   var branch = 'heads/master'; // you can switch to differnt branch
   
   // getting a single file object
@@ -99,7 +109,7 @@ function insertTableFromAsciidoc() {
   Github.setTokenService(function(){ return getGithubService_().getAccessToken();});
   // set the repository wrapper
   // Github.setRepo('YOUR_USERNAME', 'YOUR_REPO');
-  Github.setRepo('alexisgo', 'GitHub-GAS-tester'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
+  Github.setRepo('alexisgo', 'GitHub-GAppScript'); // e.g. Github.setRepo('mhawksey', 'mhawksey.github.io');
   var branch = 'heads/master'; // you can switch to differnt branch
   
   // getting a single file object
