@@ -1,19 +1,74 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
+    <style>
+      body {
+        vertical-align: baseline;
+        font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+        margin: 0 .25em 0 0;
+        padding: .78571429em 1.5em;
+        font-weight: 700;
+        line-height: 1em;
+        font-style: normal;
+        text-align: center;
+      }
+      button {
+        cursor: pointer;
+        display: inline-block;
+        min-height: 1em;
+        outline: 0;
+        border: none;
+        background: #E0E1E2;
+        color: rgba(0,0,0,.6);
+        text-decoration: none;
+        border-radius: .28571429rem;
+        box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34,36,38,.15) inset;
+      } 
+    </style>
+    <script>
+      function updateButton(authURL, button) {
+        button.onclick = window.open(authURL);
+      }
+    </script>
   </head>
   <body>
-<input type="button" value="Close" onclick="google.script.host.close()" />
+
 
 <div class="heading">Performance Tables</div>
-<form>
-<input type="button" value="Login GitHub" onclick="google.script.run.openGitHubDialog()" />
-<br>
-<input type="button" value="Insert Text from File" onclick="google.script.run.getSmallFileFromGithub()" />
-<br>
-<input type="button" value="Insert Table" onclick="google.script.run.insertTableFromAsciidoc()" />
-</form>
+
+<!-- 
+withSuccessHandler: Sets a callback function to run if the server-side function returns successfully. 
+
+Further documentation of additional methods you can use with google.script.run are available here:
+https://developers.google.com/apps-script/guides/html/reference/run#withfailurehandlerfunction
+
+Should openGitHubDialog() return successfully, the updateButton function runs, 
+passing both the *this* user object and the return value of
+openGitHubDialog() to updateButton().
+-->
+
+<br><br>
+<button onclick="google.script.run
+          .withSuccessHandler(updateButton)
+          .withUserObject(this)
+          .openGitHubDialog()">
+   <i class="fa fa-github icon" aria-hidden="true"></i>
+   Login to GitHub
+</button>
+
+<br><br>
+<button onclick="google.script.run.getSmallFileFromGithub()">
+Insert Text from File
+</button>
+
+<br><br>
+<button onclick="google.script.run.insertTableFromAsciidoc()">
+Insert Table
+</button>
+
+<!-- font awesome -->
+<script src="//use.fontawesome.com/d9bd51c39a.js"></script>
+
   </body>
 </html>
 

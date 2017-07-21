@@ -45,11 +45,21 @@ function showSidebar() {
 }
 
 function openGitHubDialog() {
+  var html = ""
+  if (getGithubService_().hasAccess()){
+    html = '<button id="github_signout" class="ui github button"><i class="fa fa-github icon"></i>Disconnect Github</button>';
+  } else {
+    html = getGithubAuthURL();
+    //authorizationUrl = getGithubAuthURL();
+    //html = HtmlService.createHtmlOutput('<a href="'+authorizationUrl+'">Sign in with GitHub</a>');
+  }
+  return html;
+  /*
   authorizationUrl = PropertiesService.getScriptProperties().getProperty('GitAuthURL');
   var html = HtmlService.createHtmlOutput('<a href="'+authorizationUrl+'">Sign in with GitHub</a>');
   DocumentApp.getUi() // Or DocumentApp or FormApp.
       .showModalDialog(html, 'Login to GitHub');
-  
+  */
   // Need a way to make the dialog go away / show if it worked or failed
 }
 
@@ -171,16 +181,12 @@ function authCallbackGit(e) {
 }
 
 /**
- * Logs the redict URI to register in the Google Developers Console, etc.
+ * Returns GitHub's authorization URL
  */
 function getGithubAuthURL() {
-    var service = getGithubService_();
-    var authorizationUrl = service.getAuthorizationUrl();
-    Logger.log(authorizationUrl);
-  
-    // Store the authorization URL in a google app script property
-    var scriptProperties = PropertiesService.getScriptProperties();
-    scriptProperties.setProperty('GitAuthURL', authorizationUrl);
+  var service = getGithubService_();
+  var authorizationUrl = service.getAuthorizationUrl();
+  return authorizationUrl;
 }
 
 
