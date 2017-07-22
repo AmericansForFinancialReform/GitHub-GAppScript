@@ -1,6 +1,6 @@
 [role="tester:name=CoolStuff:description=This is my amazing description"]
 |===
-| Best Column | Col2 (Description) | Col3
+| Col 1  | Col2 (Description) | Col3
 
 |Stuff 1 | | 
 |Stuff 2 | | 
