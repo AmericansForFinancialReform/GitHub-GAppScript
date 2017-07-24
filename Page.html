@@ -26,10 +26,42 @@
         box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34,36,38,.15) inset;
       } 
     </style>
-    <script>
-    google.script.run.withSuccessHandler(showRepoList)
-        .getRepoList();
     
+    <script> 
+    // See if we are already authenticated
+    // update button if we are -- button text and button url
+    google.script.run.withSuccessHandler(handleGithubButton)
+        .isAuthenticated();
+        
+    // this will run with the return value of the isAuthenticated() function
+    // passed as an argument
+    function handleGithubButton(isAuthenticated) {
+       if (isAuthenticated) {
+         console.log("is authenticated");
+         document.getElementById("github_label").innerHTML = "Disconnect";
+         document.getElementById("github_button").onclick = google.script.run.disconnectGitHub();
+
+         // we need to use a success handler in order for a server function 
+         //to return a value to the client as a parameter 
+         google.script.run.withSuccessHandler(showRepoList)
+           .getRepoList();
+       }
+       else {
+         console.log("is NOT authenticated");
+         document.getElementById("github_label").innerHTML = "Login to GitHub"; 
+         google.script.run.withSuccessHandler(assignGithubAuthURL)
+           .getGithubAuthURL();
+       }
+    }
+    
+    function assignGithubAuthURL(authURL) {
+      console.log("auth URL is " + authURL);
+      document.getElementById("github_button").onclick = function() { 
+        var result = window.open(authURL);
+        console.log("result is " + result);
+      };
+    }
+        
     function showRepoList(data) {
       var list = document.getElementById("repo"); 
       list.append(new Option("--Select your repo--", ""));
@@ -51,9 +83,8 @@
       document.getElementById('step-folder-open button').removeClass('disabled');
     }
     
-    // TO-DO: see if we are already authenticated
-    // update button if we are -- button text and button url
-
+       // this will run whenever the button is clicked, passing the button itself in,
+       // along with the return value of the openGitHubDialog() function
       function updateButton(authURL, button) {
         button.onclick = window.open(authURL);
       }
@@ -62,12 +93,16 @@
   <body>
   <div class="heading">Login to GitHub</div>
     <hr/>
-  <button onclick="google.script.run
+    <!--
+  <button id="github_button" onclick="google.script.run
   .withSuccessHandler(updateButton)
   .withUserObject(this)
   .openGitHubDialog()">
-  <i class="fa fa-github icon" aria-hidden="true"></i>
-  <span id="github_button">Login</span>
+  -->
+  <button id="github_button">
+
+<i class="fa fa-github icon" aria-hidden="true"></i>
+  <span id="github_label"></span>
   </button>
   
   <br><br>

@@ -31,7 +31,6 @@ function onOpen(e) {
   .addToUi();
 }
 
-
 function showSidebar() {
   var html = HtmlService.createHtmlOutputFromFile('Page')
       .setTitle('Import Legal Text')
@@ -41,16 +40,13 @@ function showSidebar() {
 }
 
 function openGitHubDialog() {
-  var html = ""
-  if (getGithubService_().hasAccess()){
-    html = '<button id="github_signout" class="ui github button"><i class="fa fa-github icon"></i>Disconnect Github</button>';
-  } else {
+  var html = "";
+  if (!getGithubService_().hasAccess()){
     html = getGithubAuthURL();
   }
-  return html;
+  return html;  
 }
 
-// currently unused
 function isAuthenticated() {
   if (getGithubService_().hasAccess()){
     return true;
@@ -179,6 +175,11 @@ function insertTableFromAsciidoc() {
   } else {
     DocumentApp.getUi().alert('Could not find the cursor');
   }
+}
+
+
+function disconnectGitHub() {
+  getGithubService_().reset();
 }
 
 // From Eric Koleda oAuth2 setup
